@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class App {
-    Scanner sc;
-    WiseSayingController wiseSayingController;
+    private Scanner sc;
+    private WiseSayingController wiseSayingController;
     public App(Scanner scanner) {
         sc = scanner;
         wiseSayingController = new WiseSayingController(sc);

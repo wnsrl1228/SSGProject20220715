@@ -6,8 +6,8 @@ import java.util.Scanner;
 
 public class WiseSayingService {
 
-    Scanner sc;
-    WiseSayingRepository wiseSayingRepository;
+    private Scanner sc;
+    private WiseSayingRepository wiseSayingRepository;
     WiseSayingService(Scanner sc) {
         this.sc = sc;
         wiseSayingRepository = new WiseSayingRepository(sc);
@@ -17,17 +17,21 @@ public class WiseSayingService {
         return wiseSayingRepository.write(content,author);
     }
 
-    public boolean remove(int paramId) {
-        return wiseSayingRepository.remove(paramId);
+    public void remove(int paramId) {
+        wiseSayingRepository.remove(paramId);
 
     }
 
-    public boolean modify(int paramId) {
-        return wiseSayingRepository.modify(paramId);
+    public void modify(int paramId, String content, String author) {
+        wiseSayingRepository.modify(paramId, content, author);
 
     }
 
     public void list() {
         wiseSayingRepository.list();
+    }
+
+    public WiseSaying findById(int paramId) {
+        return wiseSayingRepository.findById(paramId);
     }
 }

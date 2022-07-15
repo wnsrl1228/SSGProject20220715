@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Scanner;
 
 public class WiseSayingRepository {
-    int lastIndex;
-    List<WiseSaying> wiseSayings = new ArrayList<>();
-    Scanner sc;
+    private int lastIndex;
+    private List<WiseSaying> wiseSayings = new ArrayList<>();
+    private Scanner sc;
     WiseSayingRepository(Scanner sc){
         this.sc = sc;
         lastIndex = 0;
@@ -20,27 +20,15 @@ public class WiseSayingRepository {
         return wiseSaying;
     }
 
-    public boolean remove(int paramId) {
-        for (WiseSaying saying : wiseSayings) {
-            if (saying.id == paramId){
-                wiseSayings.remove(saying);
-                return true;
-            }
-        }
-        return false;
+    public void remove(int paramId) {
+        WiseSaying foundWiseSaying =  findById(paramId);
+        wiseSayings.remove(foundWiseSaying);
     }
 
-    public boolean modify(int paramId) {
-        for (WiseSaying saying : wiseSayings) {
-            if (saying.id == paramId){
-                System.out.println("명언(기존) : " + saying.content);
-                saying.content = sc.nextLine();
-                System.out.println("작가(기존) : " + saying.author);
-                saying.author = sc.nextLine();
-                return true;
-            }
-        }
-        return false;
+    public void modify(int paramId, String content, String author) {
+        WiseSaying foundWiseSaying =  findById(paramId);
+        foundWiseSaying.content = content;
+        foundWiseSaying.author = author;
     }
 
     public void list() {
@@ -48,4 +36,15 @@ public class WiseSayingRepository {
             System.out.printf("%d / %s / %s\n",saying.id, saying.author, saying.content);
         }
     }
+
+    public WiseSaying findById(int paramId) {
+        for (WiseSaying saying : wiseSayings) {
+            if (saying.id == paramId){
+                return saying;
+            }
+        }
+        return null;
+    }
+
+
 }
