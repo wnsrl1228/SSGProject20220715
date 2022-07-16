@@ -21,6 +21,11 @@ public class WiseSayingController {
 
         WiseSaying wiseSaying = wiseSayingService.write(content, author);
 
+        if (wiseSaying == null) {
+            System.out.println("마지막 id를 찾지 못하였습니다.");
+            return;
+        }
+
         System.out.println(wiseSaying.id+"번 명언이 등록되었습니다.");
     }
 
@@ -29,6 +34,7 @@ public class WiseSayingController {
 
         if (paramId == 0){
             System.out.println("id가 존재하지 않습니다.");
+            return;
         }
         WiseSaying foundWiseSaying = wiseSayingService.findById(paramId);
 
@@ -47,6 +53,7 @@ public class WiseSayingController {
 
         if (paramId == 0){
             System.out.println("id가 존재하지 않습니다.");
+            return;
         }
 
         WiseSaying foundWiseSaying = wiseSayingService.findById(paramId);
@@ -54,6 +61,7 @@ public class WiseSayingController {
 
         if(foundWiseSaying == null) {
             System.out.println(paramId+"번 명언은 존재하지 않습니다.");
+            return;
         }
 
         System.out.println("명언(기존) : " + foundWiseSaying.content);
