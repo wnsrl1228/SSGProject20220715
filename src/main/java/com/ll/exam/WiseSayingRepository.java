@@ -1,64 +1,61 @@
 package com.ll.exam;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
+
 
 public class WiseSayingRepository {
-    private int lastIndex;
-    private List<WiseSaying> wiseSayings = new ArrayList<>();
-    private Scanner sc;
     private String path;
     private String lastIdFilePath;
-    WiseSayingRepository(Scanner sc){
-        this.sc = sc;
-        lastIndex = 0;
+    WiseSayingRepository(){
         path="data_test/wiseSaying";
         lastIdFilePath = path+"/last_id.txt";
         Util.file.mkdir(path);
 
-        int lastId = Integer.parseInt(Util.file.readFromFile(lastIdFilePath,"-1"));
-        if (lastId == -1){
+        // lastId 파일이 없는 경우 초기화 = 최초의 실행
+        if (getLastIdFromFile() == -1){
             Util.file.saveToFile(lastIdFilePath,"0");
         }
     }
 
     public WiseSaying write(String content, String author) {
-        int lastId = Integer.parseInt(Util.file.readFromFile(lastIdFilePath,"-1"));
-        String a = Util.file.readFromFile(lastIdFilePath,"-1");
+
+        //lastIdFilePath 값을 파일에서 가져온다.
+        int lastId = getLastIdFromFile();
 
         if (lastId == -1){
             return null;
         }
-        int paramId = lastId +1;
-        WiseSaying wiseSaying = new WiseSaying(paramId, content, author);
 
-        Util.file.saveToFile(path+"/%d.json".formatted(paramId), wiseSaying.toJson());
-        Util.file.saveToFile(lastIdFilePath, Integer.toString(paramId));
+        int newLastId = lastId +1;
+        WiseSaying wiseSaying = new WiseSaying(newLastId, content, author);
+
+        // 파일에 추가 + lastId 갱신
+        Util.file.saveToFile(getFileNameFromId(newLastId), wiseSaying.toJson());
+        Util.file.saveToFile(lastIdFilePath, Integer.toString(newLastId));
 
         return wiseSaying;
     }
 
     public void remove(int paramId) {
-        String paramIdPath = path+"/"+paramId+".json";
-        Util.file.deleteDir(paramIdPath);
+        Util.file.deleteDir(getFileNameFromId(paramId));
     }
 
     public void modify(int paramId, String content, String author) {
-        String paramIdPath = path+"/"+paramId+".json";
+        // 파일을 덮어쓴다 = 수정
         WiseSaying wiseSaying = new WiseSaying(paramId, content, author);
-        Util.file.saveToFile(paramIdPath, wiseSaying.toJson());
+        Util.file.saveToFile(getFileNameFromId(paramId), wiseSaying.toJson());
     }
 
     public void list() {
-        int lastId = Integer.parseInt(Util.file.readFromFile(lastIdFilePath,"-1"));
+
+        // 파일에서 마지막 id가져옴
+        int lastId = getLastIdFromFile();
         if (lastId == -1){
             return;
         }
         for (int i = 1; i <= lastId; i++) {
-            Map<String, Object> map = Util.json.jsonToMapFromFile(path+"/"+i+".json");
+            Map<String, Object> map = Util.json.jsonToMapFromFile(getFileNameFromId(i));
 
             if (map == null) {
                 continue;
@@ -73,19 +70,26 @@ public class WiseSayingRepository {
     }
 
     public WiseSaying findById(int paramId) {
-        String paramIdPath = path+"/"+paramId+".json";
 
+        // 파일이 존재하지 않는 경우
         if (new File(path).exists() == false) {
             return null;
         }
 
-        Map<String,Object> map = Util.json.jsonToMapFromFile(paramIdPath);
+        Map<String,Object> map = Util.json.jsonToMapFromFile(getFileNameFromId(paramId));
 
         if (map == null) {
             return null;
         }
+
         return new WiseSaying((int) map.get("id"), (String) map.get("content"), (String) map.get("author"));
     }
 
+    public String getFileNameFromId(int paramId) {
+        return path+"/"+paramId+".json";
+    }
 
+    public int getLastIdFromFile() {
+        return Integer.parseInt(Util.file.readFromFile(lastIdFilePath,"-1"));
+    }
 }

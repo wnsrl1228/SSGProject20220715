@@ -1,9 +1,6 @@
 package com.ll.exam;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
-
 public class App {
     private Scanner sc;
     private WiseSayingController wiseSayingController;

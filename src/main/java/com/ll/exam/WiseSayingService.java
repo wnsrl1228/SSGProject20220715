@@ -1,16 +1,10 @@
 package com.ll.exam;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-
 public class WiseSayingService {
-
-    private Scanner sc;
     private WiseSayingRepository wiseSayingRepository;
-    WiseSayingService(Scanner sc) {
-        this.sc = sc;
-        wiseSayingRepository = new WiseSayingRepository(sc);
+    WiseSayingService() {
+
+        wiseSayingRepository = new WiseSayingRepository();
     }
 
     public WiseSaying write(String content, String author) {

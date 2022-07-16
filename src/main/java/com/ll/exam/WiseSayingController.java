@@ -1,7 +1,5 @@
 package com.ll.exam;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class WiseSayingController {
@@ -10,7 +8,7 @@ public class WiseSayingController {
     private WiseSayingService wiseSayingService;
     WiseSayingController(Scanner sc){
         this.sc =sc;
-        wiseSayingService = new WiseSayingService(sc);
+        wiseSayingService = new WiseSayingService();
     }
 
     public void write() {
